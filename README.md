@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a python implementation of the algorithm for "Bayesian structure learning under uncertain interventions", a bayesian mcmc algorithm developed by Castelletti and Peluso.
+This is a python implementation of the algorithm for "Newtork structure learning under uncertain interventions", a bayesian mcmc algorithm developed by Castelletti and Peluso.
 
 ## Installation
 
