@@ -207,17 +207,24 @@ class MCMCDagTargets:
         return A_inv
     
     
-    def n_edge(self, A):
+    def count_edges(self, A):
         """
-        Compute the number of edges in an adjacency matrix.
+        Count the number of edges in a Directed Acyclic Graph (DAG) represented as an adjacency matrix.
 
-        Args:
-        A (numpy.ndarray)
+        Parameters:
+        - adjacency_matrix (np.ndarray): The adjacency matrix of the DAG.
 
         Returns:
-        int: Number of edges in A.
-        """         
-        return len(np.where((A[np.tril_indices(A.shape[0])] == 1) | (np.transpose(A)[np.tril_indices(A.shape[0])] == 1)))
+        - int: The number of edges in the DAG.
+        """
+        # Ensure the matrix is square and binary
+        if not isinstance(A, np.ndarray) or A.shape[0] != A.shape[1]:
+            raise ValueError("Input must be a square numpy array representing a binary adjacency matrix.")
+
+        # Count the number of edges in the upper triangle of the matrix
+        num_edges = np.sum(A != 0)
+
+        return num_edges
     
 
     def id(self, A, nodes):
@@ -464,6 +471,7 @@ class MCMCDagTargets:
             a = q
 
         Graph_post = np.empty((q, q, S))
+        trace_edges = np.empty(S)
         Targets_post = np.zeros((q, K, S))
 
         # Initialize the chain
@@ -545,6 +553,7 @@ class MCMCDagTargets:
                 Graph = Graph_prop#.copy()
 
             Graph_post[:, :, s] = Graph
+            trace_edges[s] = self.count_edges(Graph)
 
 
             # Update the targets given the DAG
@@ -621,7 +630,8 @@ class MCMCDagTargets:
             #"X": X,
             "Targets_estimate": I_cal_hat,
             "P_DAG_estimate": P_hat,
-            "DAG_estimate": A_hat
+            "DAG_estimate": A_hat,
+            "Trace_DAG_edges":trace_edges
             }
 
 
