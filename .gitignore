@@ -1,2 +1,4 @@
 data/VP.feather
+data/data_processed.csv
+data/VP.csv
 model_functions
